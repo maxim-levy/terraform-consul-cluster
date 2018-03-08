@@ -575,7 +575,7 @@ A quick check of the admin dashboard shows we now have a recovered system, with 
 
 ![Screenshot showing recovered system](img-18b-recovered.png)
 
-The nodes which were terminated are still listed as failing. After 72 hours Consul will stop trying to periodically reconnect to these nodes and completely remove them[^16].
+The nodes which were terminated are still listed as failing. After 72 hours Consul will stop trying to periodically reconnect to these nodes and completely remove them<sup>[16](#myfootnote16)</sup>.
 
 ## Wrapping Up
 
@@ -643,7 +643,7 @@ I got some a great PR from [arehmandev](https://github.com/arehmandev) which mod
 
 [^15]: In fact, we actually have more permissions required, because in the 'real' code we also have logs forwarded to CloudWatch.
 
-[^16]: These nodes can be removed manually, see [Consul Force Leave](https://www.consul.io/docs/commands/force-leave.html).
+<a name="myfootnote16">16</a>: These nodes can be removed manually, see [Consul Force Leave](https://www.consul.io/docs/commands/force-leave.html).
 
 ---
 
