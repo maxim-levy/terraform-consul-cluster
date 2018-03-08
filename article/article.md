@@ -605,7 +605,7 @@ I've included CloudWatch logging in the code. In this write-up I've omitted this
 
 If you want more details, let me know, or just check the code. I would heartily recommend setting up logging like this for all but the most straightforward projects:
 
-![Screenshot showing logs](img-19-cloudwatch-1.png)
+![Screenshot showing logs](img-19-cloudwatch.png)
 
 Being able to diagnose issues like this is vital when working with distributed systems which may be generating many log files.
 
