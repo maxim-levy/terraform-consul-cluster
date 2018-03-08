@@ -16,7 +16,7 @@ A lot of what we will learn is not really AWS specific - and the Infrastructure 
 
 The goal is to create a system like this:
 
-![](img-0-goal.png)
+![Overall System Diagram](img-0-goal.png)
 
 In a nutshell:
 
@@ -132,7 +132,7 @@ The final parts of the network you can see in the [./infrastructure/network.tf](
 
 That's it for the network, we now have the following structure:
 
-![](img-1-network.png)
+![](img-1-network-1.png)
 
 If you want to see the code as it stands now, check the [Step 1](https://github.com/dwmkerr/terraform-consul-cluster/tree/step-1) branch. Now we need to look at creating the hosts to install Consul on.
 
@@ -151,7 +151,7 @@ So we now need to create:
 
 Or visually:
 
-![Basic Cluster Diagram](img-5-cluster-basic-2.png)
+![](img-5-cluster-basic.png)
 
 Let's get to it.
 
