@@ -331,7 +331,7 @@ The challenge is how do we get the IP of node 1? The IP addresses are determined
 
 There's a nice trick we can use here. We can ask AWS to give us the IP addresses of each host in the auto-scaling group. If we tell each node the addresses of the *other nodes*, then they will elect a leader themselves[^14].
 
-![Diagram showing how we decide on a leader IP](img-12-choose-leader-1.png)
+![Diagram showing how we decide on a leader IP](img-12-choose-leader.png)
 
 There are a couple of things we need to do to get this right. First, update the userdata script to provide the IPs of other nodes when we're starting up, then update the **role** of our nodes so that they have permissions to use the APIs we're going to call.
 
