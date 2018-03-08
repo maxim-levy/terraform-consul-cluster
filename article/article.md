@@ -4,11 +4,11 @@ The final code is at [github.com/dwmkerr/terraform-consul-cluster](https://githu
 
 ## Consul, Terraform & AWS
 
-[Consul](https://www.consul.io/) is a technology which enables *Service Discovery*[^1], a pattern which allows services to locate each other via a central authority.
+[Consul](https://www.consul.io/) is a technology which enables *Service Discovery*<sup>[1](#myfootnote1)</sup>, a pattern which allows services to locate each other via a central authority.
 
 [Terraform](https://www.terraform.io/) is a technology which allows us to script the provisioning of infrastructure and systems. This allows us to practice the *Infrastructure as Code* pattern. The rigour of code control (versioning, history, user access control, diffs, pull requests etc) can be applied to our systems.
 
-And why [AWS](https://aws.amazon.com/)? We need to create many servers and build a network to see this system in action. We can simulate parts of this locally with tools such as [Vagrant](https://www.vagrantup.com/), but we can use the arguably most popular[^2] IaaS platfom for this job at essentially zero cost, and learn some valuable skills which are readily applicable to other projects at the same time.
+And why [AWS](https://aws.amazon.com/)? We need to create many servers and build a network to see this system in action. We can simulate parts of this locally with tools such as [Vagrant](https://www.vagrantup.com/), but we can use the arguably most popular<sup>[2](#myfootnote2)</sup> IaaS platfom for this job at essentially zero cost, and learn some valuable skills which are readily applicable to other projects at the same time.
 
 A lot of what we will learn is not really AWS specific - and the Infrastructure as Code pattern which Terraform helps us apply allows us to apply these techniques easily with other providers.
 
@@ -41,15 +41,15 @@ All together, that's this:
 
 ![](img-1-network.png)
 
-Our solution will be made more resilient by ensuring we host our Consul nodes across multiple *availability zones*[^3]
+Our solution will be made more resilient by ensuring we host our Consul nodes across multiple *availability zones*<sup>[3](#myfootnote3)</sup>
 
-Creating a VPC and building a subnet is fairly trivial if you have done some network setup before or spent much time working with AWS, if not, you may be a little lost already. There's a good course on Udemy[^4] which will take you through the process of setting up a VPC which I recommend if you are interested in this, as it is quite hands on. It'll also show you how to build a more 'realistic' network, which also contains a private subnet and NAT, but that's beyond the scope of this write-up. Instead, I'll take you through the big parts.
+Creating a VPC and building a subnet is fairly trivial if you have done some network setup before or spent much time working with AWS, if not, you may be a little lost already. There's a good course on Udemy<sup>[4](#myfootnote4)</sup> which will take you through the process of setting up a VPC which I recommend if you are interested in this, as it is quite hands on. It'll also show you how to build a more 'realistic' network, which also contains a private subnet and NAT, but that's beyond the scope of this write-up. Instead, I'll take you through the big parts.
 
 ### The Network
 
 We're using AWS, we need to create a VPC. A VPC is a Virtual Private Cloud. The key thing is that it is *isolated*. Things you create in this network will be able to talk to each other if you let them, but cannot communicate with the outside world, unless you specifically create the parts needed for them to do so.
 
-A private network is probably something you regularly use if you work in a company[^5]. Most companies have their own internal network - when you use a computer on that network it can talk to other company computers (such as the company mail server). When you are off that network, you might not be able to access your company email (unless it is publicly available, like gmail, or over a VPN [and by accessing a VPN, you are actually *joining* the network again, albeit remotely]).
+A private network is probably something you regularly use if you work in a company<sup>[5](#myfootnote5)</sup>. Most companies have their own internal network - when you use a computer on that network it can talk to other company computers (such as the company mail server). When you are off that network, you might not be able to access your company email (unless it is publicly available, like gmail, or over a VPN [and by accessing a VPN, you are actually *joining* the network again, albeit remotely]).
 
 Perhaps the most immediately obvious part of a VPC is that *you control the IP addresses*. You specify the *range* of IP addresses which are available to give to machines on the network. When a machine joins, it is given an IP in that range. I'm not going to go into too much detail here, if you are interested let me know and I'll write up an article on VPCs in detail!
 
@@ -105,7 +105,7 @@ Here's a common subnet layout for multi-tiered applications:
 
 ![](img-4-subnets.png)
 
-The defining characteristics of zones is that they are used to create *boundaries* to isolate hosts. These boundaries are normally secured by firewalls, traversed via gateways or NATs etc. We're going to create two public subnets, one in each of the availability zones[^5]:
+The defining characteristics of zones is that they are used to create *boundaries* to isolate hosts. These boundaries are normally secured by firewalls, traversed via gateways or NATs etc. We're going to create two public subnets, one in each of the availability zones<sup>[5](#myfootnote5)</sup>:
 
 ```
 //  Create a public subnet for each AZ.
@@ -138,9 +138,9 @@ If you want to see the code as it stands now, check the [Step 1](https://github.
 
 ## Step 2 - Creating the Consul Hosts
 
-The Consul documentation recommends running in a cluster or 3 or 5 nodes[^7]. We want to set up a system which is self-healing - if we lose a node, we want to create a new one.
+The Consul documentation recommends running in a cluster or 3 or 5 nodes<sup>[7](#myfootnote7)</sup>. We want to set up a system which is self-healing - if we lose a node, we want to create a new one.
 
-Enter [Auto-Scaling Groups](http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html). Auto-scaling groups allow us to define a template for an instance, and ask AWS to make sure there are always a certain number of these instances. If we lose an instance, a new one will be created to keep the group at the correct size[^8].
+Enter [Auto-Scaling Groups](http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html). Auto-scaling groups allow us to define a template for an instance, and ask AWS to make sure there are always a certain number of these instances. If we lose an instance, a new one will be created to keep the group at the correct size<sup>[8](#myfootnote8)</sup>.
 
 So we now need to create:
 
@@ -190,7 +190,7 @@ resource "aws_autoscaling_group" "consul-cluster-asg" {
 A few key things to note:
 
 1. I have omitted the `tag` properties in the scripts for brevity
-2. The 'image' for the launch configuration is looked up based on the region we've specified - we're a basic linux image[^9]
+2. The 'image' for the launch configuration is looked up based on the region we've specified - we're a basic linux image<sup>[9](#myfootnote9)</sup>
 3. We are using micro instances, which are free-tier eligible
 4. The auto-scaling group spans both availability zones.
 
@@ -281,7 +281,7 @@ Blow-by-blow:
 1. Create a load balancer, with the same security groups as the rest of the VPC, but also a security group which allows web access
 2. Point to two subnets first subnet
 3. Forward HTTP 8500 traffic
-4. Configure a healthcheck[^12]
+4. Configure a healthcheck<sup>[12](#myfootnote12)</sup>
 
 The final change we make is to add an `outputs.tf` file, which lists all of the properties Terraform knows about which we want to save. All it includes is:
 
@@ -329,7 +329,7 @@ The challenge is how do we get the IP of node 1? The IP addresses are determined
 
 ### Getting the IP addresses of nodes in the cluster
 
-There's a nice trick we can use here. We can ask AWS to give us the IP addresses of each host in the auto-scaling group. If we tell each node the addresses of the *other nodes*, then they will elect a leader themselves[^14].
+There's a nice trick we can use here. We can ask AWS to give us the IP addresses of each host in the auto-scaling group. If we tell each node the addresses of the *other nodes*, then they will elect a leader themselves<sup>[14](#myfootnote14)</sup>.
 
 ![Diagram showing how we decide on a leader IP](img-12-choose-leader.png)
 
@@ -404,7 +404,7 @@ The problem is, if we try to run the script we will fail, because calling the AW
 
 ### Creating a Role for our nodes
 
-Our nodes now have a few special requirements. They need to be able to query the details of an auto-scaling group and get the IP of an instance[^15].
+Our nodes now have a few special requirements. They need to be able to query the details of an auto-scaling group and get the IP of an instance<sup>[15](#myfootnote15)</sup>.
 
 We will need to create a policy which describes the permissions we need, create a role, attach the policy to the role and then ensure our instances are assigned the correct role. This is `consul-node-role.tf` file:
 
@@ -596,7 +596,7 @@ As always, any questions or comments are welcome! All code is available at [gith
 
 Small typos or mistakes in the userdata script are almost impossible to effectively diagnose. The scripts were actually built in the following way:
 
-1. Draft a script on my local machine which configures script logging and CloudWatch[^13]
+1. Draft a script on my local machine which configures script logging and CloudWatch<sup>[13](#myfootnote13)</sup>
 2. Spin up a new EC2 instance manually
 3. SSH onto the instance, and run the script line by line until I'm sure it's right
 4. Ensure the logs are forwarded to CloudWatch, then add the more complex features and repeatedly test
@@ -617,33 +617,33 @@ I got some a great PR from [arehmandev](https://github.com/arehmandev) which mod
 
 **Footnotes**
 
-[^1]: This kind of pattern is critical in the world of microservices, where many small services will be running on a cluster. Services may die, due to errors or failing hosts, and be recreated on new hosts. Their IPs and ports may be ephemeral.It is essential that the system as a whole has a registry of where each service lives and how to access it. Such a registry must be *resilient*, as it is an essential part of the system.
+<a name="myfootnote1">[1]</a>: This kind of pattern is critical in the world of microservices, where many small services will be running on a cluster. Services may die, due to errors or failing hosts, and be recreated on new hosts. Their IPs and ports may be ephemeral.It is essential that the system as a whole has a registry of where each service lives and how to access it. Such a registry must be *resilient*, as it is an essential part of the system.
 
-[^2]: Most popular is a fairly loose term. Well ranked by Gartner and anecdotally with the largest infrastructure footprint. https://www.gartner.com/doc/reprints?id=1-2G2O5FC&ct=150519&st=sb
+<a name="myfootnote2">[2]</a>: Most popular is a fairly loose term. Well ranked by Gartner and anecdotally with the largest infrastructure footprint. https://www.gartner.com/doc/reprints?id=1-2G2O5FC&ct=150519&st=sb
 
-[^3]: This is AWS parlance again. An availabilty zone is an isolated datacenter. Theoretically, spreading nodes across AZs will increase resilience as it is less likely to have catastrophic failures or outages across multiple zones.
+<a name="myfootnote3">[3]</a>: This is AWS parlance again. An availabilty zone is an isolated datacenter. Theoretically, spreading nodes across AZs will increase resilience as it is less likely to have catastrophic failures or outages across multiple zones.
 
-[^4]: I don't get money from Udemy or anyone else for writing anything on this blog. All opinions are purely my own and influenced by my own experience, not sponsorship. Your milage may vary (yada yada) but I found the course quite good: https://www.udemy.com/aws-certified-solutions-architect-associate/.
+<a name="myfootnote4">[4]</a>: I don't get money from Udemy or anyone else for writing anything on this blog. All opinions are purely my own and influenced by my own experience, not sponsorship. Your milage may vary (yada yada) but I found the course quite good: https://www.udemy.com/aws-certified-solutions-architect-associate/.
 
-[^5]: For more expert readers that may sound horribly patronising, I don't mean it to be. For many less experienced technologists the basics of networking might be more unfamiliar!
+<a name="myfootnote5">[5]</a>: For more expert readers that may sound horribly patronising, I don't mean it to be. For many less experienced technologists the basics of networking might be more unfamiliar!
 
-[^6]: A subnet cannot span availability zones, so we need one for each.
+<a name="myfootnote6">[6]</a>: A subnet cannot span availability zones, so we need one for each.
 
-[^7]: See https://www.consul.io/docs/internals/consensus.html.
+<a name="myfootnote7">[7]</a>: See https://www.consul.io/docs/internals/consensus.html.
 
-[^8]: A common pattern is to actually make the group size dynamic, responding to events. For example, we could have a group of servers which increases in size if the average CPU load of the hosts stays above 80% for five minutes, and scales down if it goes below 10% for ten minutes. This is more common for app and web servers and not needed for our system.
+<a name="myfootnote8">[8]</a>: A common pattern is to actually make the group size dynamic, responding to events. For example, we could have a group of servers which increases in size if the average CPU load of the hosts stays above 80% for five minutes, and scales down if it goes below 10% for ten minutes. This is more common for app and web servers and not needed for our system.
 
-[^9]: Specifically, the current latest [Amazon Linux AMI](https://aws.amazon.com/amazon-linux-ami/).
+<a name="myfootnote9">[9]</a>: Specifically, the current latest [Amazon Linux AMI](https://aws.amazon.com/amazon-linux-ami/).
 
-[^12]: Check the admin UI every 30 seconds, more than 3 seconds indicates a timeout and failure. Two failures in a row means an unhealthy host, which will be destroyed, two successes in a row for a new host means healthy, which means it will receive traffic.
+<a name="myfootnote12">[12]</a>: Check the admin UI every 30 seconds, more than 3 seconds indicates a timeout and failure. Two failures in a row means an unhealthy host, which will be destroyed, two successes in a row for a new host means healthy, which means it will receive traffic.
 
-[^13]: Amazon's service for managing and aggregating logs
+<a name="myfootnote13">[13]</a>: Amazon's service for managing and aggregating logs
 
-[^14]: This is a fairly sophisticated topic in itself, see [Consul - Consensus Protocol](https://www.consul.io/docs/internals/consensus.html) for details.
+<a name="myfootnote14">[14]</a>: This is a fairly sophisticated topic in itself, see [Consul - Consensus Protocol](https://www.consul.io/docs/internals/consensus.html) for details.
 
-[^15]: In fact, we actually have more permissions required, because in the 'real' code we also have logs forwarded to CloudWatch.
+<a name="myfootnote15">[15]</a>: In fact, we actually have more permissions required, because in the 'real' code we also have logs forwarded to CloudWatch.
 
-<a name="myfootnote16">16</a>: These nodes can be removed manually, see [Consul Force Leave](https://www.consul.io/docs/commands/force-leave.html).
+<a name="myfootnote16">[16]</a>: These nodes can be removed manually, see [Consul Force Leave](https://www.consul.io/docs/commands/force-leave.html).
 
 ---
 
