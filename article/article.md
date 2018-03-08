@@ -132,7 +132,7 @@ The final parts of the network you can see in the [./infrastructure/network.tf](
 
 That's it for the network, we now have the following structure:
 
-![](img-1-network-1.png)
+![](img-1-network.png)
 
 If you want to see the code as it stands now, check the [Step 1](https://github.com/dwmkerr/terraform-consul-cluster/tree/step-1) branch. Now we need to look at creating the hosts to install Consul on.
 
