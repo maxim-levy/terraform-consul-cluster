@@ -569,7 +569,7 @@ What's nice about this setup is that no manual action is needed to recover. Our 
 
 We can see from the load balancer monitoring that it notices we have unhealthy nodes and also notices when new ones come into service:
 
-![Screenshot showing the load balancer monitoring](img-18-recovery-1.png)
+![Screenshot showing the load balancer monitoring](img-18-recovery.png)
 
 A quick check of the admin dashboard shows we now have a recovered system, with five healthy nodes:
 
